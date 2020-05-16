@@ -1,0 +1,3 @@
+gcc -Wall -I. -o asd multiplicar.c invento.S 
+
+(no se por que no hice un makefile xd)
