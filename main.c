@@ -16,15 +16,17 @@ int main(){
 	int largo_linea = 0;
 	char* linea;
 
+	FILE* entrada = fopen("tests/entrada.txt", "r");
 
-	linea = leer (stdin, &largo_linea);
+
+	linea = leer (entrada, &largo_linea);
 
 	for (int i = 0; i < largo_linea; ++i){
 		printf("%c \n", linea[i] );
 	}
 		
 	free(linea);
-
+	fclose(entrada);
 	return 0;
 }
 
@@ -37,7 +39,7 @@ char* leer( FILE* stream,int* largo_linea ){
 	*largo_linea = 0;
 	char caracter = 'A'; // un valor trivial
 
-	while ( (caracter != EOL ) || (caracter != EOF) ) {
+	while ( (caracter != EOL ) && (caracter != EOF) ) {
 
     	if( *largo_linea == largo_buffer){ // tengo que agrandar mi memoria.
      	 	largo_buffer +=10; //Voy agregando de a 10 lugares. 
@@ -45,7 +47,6 @@ char* leer( FILE* stream,int* largo_linea ){
     	}
 
     caracter = getc(stream); // Leo un caracter del stream.
-    printf("%i \n",*largo_linea );
     linea[*largo_linea] = caracter; //Lo guardo en el linea.
     (*largo_linea)+=1; //Incremento mi tope.
 
