@@ -47,14 +47,14 @@ merge_sort:
         jal     merge_sort  #tomo la primera mitad del vector y aplico merge sort
 
         lw      s0,0(sp)    #cargo en s0 el valor del indice del medio
-        lw      a3,4(sp)    #cargo en a1 el valor del indice derecho
+        lw      a3,4(sp)    #cargo en a3 el valor del indice derecho
         addi    s0,s0,1     #sumo s0=s0+1
         addi    a2,s0,0     #establezco el nuevo indice izquierdo como el indice del medio
         jal     merge_sort  #tomo la segunda mitad del vector y aplico merge sort
 
         lw      a2,8(sp)    #cargo en a2 el valor del indice izquierdo
         lw      a3,4(sp)    #cargo en a3 el valor del indice derecho
-        lw      s0,0(sp)    #cargo en s0 el valor del indice del medio
+        lw      a4,0(sp)    #cargo en a4 el valor del indice del medio
         jal     merge       #llamo a la funcion merge para mergear las mitades de vectores
 
 ####chequear si todo esto deberia ir ahora o solo jr ra
@@ -67,8 +67,8 @@ merge_sort:
 merge:
 ####deberia guardar en tx o en sx???
         addi    s1,a2,1
-        sub     s1,s0,s1    #guardo en s1 la longitud del primer vector
-        sub     s2,a3,s0    #guardo en s2 la longitud del segundo vector
+        sub     s1,a4,s1    #s1 = la longitud del primer vector
+        sub     s2,a3,a4    #s2 = la longitud del segundo vector
 ####arreglar los parametros para pasarle a mymalloc y ver en donde devuleve los resultados
         jal     mymalloc    #me devuelve en la posicion p1 un puntero a una direccion con espacio para guardar el vector L[s1]    
         addi    s3,p1,1
@@ -87,6 +87,7 @@ for_loop:
         addi    t3,a0,t0    #t3=vec[i]
         addi    t2,t3,0     #L[i]=vec[i]
         addu    t0,t0,1     #i++
+        j       for_loop
 
 #sale del primer for para entrar en el segundo for        
 exit_loop:
@@ -97,9 +98,51 @@ exit_loop:
         beq     t1,0,while1  #si t1=0 salto a while1
         
         addi    t2,s4,t0    #t2=R[j]
-        addi    t3,s0,1     #t3=vec[medio+1]
+        addi    t3,a4,1     #t3=vec[medio+1]
         addi    t3,t3,t0    #t3=vec[medio+1+j]
         addi    t2,t3,0     #R[j]=vec[medio+1+j]
         addu    t0,t0,1     #j++
+        j       exit_loop 
         
 while1:
+#estoy bastante segura que estoy usando registros de mas pero por ahora no me quiero pisar
+       add      s5,a2,zero  #s5 = i = indice con direccion de comienzo del primer vector
+       addi     s6,a4,1     #s6 = j = indice con direccion de comienzo del segundo vector
+       add      s7,a2,zero  #s7 = k = indice con direccion de comienzo del vector mergeado
+       
+       ble      s1,s5,while2    #si s1 <= i salto a while 2
+       ble      s2,s6,while2    #si s2 <= j salto a while 2
+       j        if              #si i<s1 && j<n2 salto a if
+       
+if:
+       sll      t0,s5,2     #escalo i: t0 = i*4
+       addu     t0,s3,t0    #t0 = direccion de L[i]
+       lw       t1,0(t0)    #cargo el valor de L[i] en t1
+       
+       sll      t2,s6,2     #escalo j: t2 = j*4
+       addu     t2,s4,t2    #t2 = direccion de R[j]
+       lw       t3,0(t2)    #cargo el valor de R[j] en t3
+       
+       blt      t3,t1,else  #si R[j]<L[i] salto a else
+       
+       sll      t4,s7,2     #escalo k: t4 = k*4
+       addu     t4,a0,t4    #t4 = direccion de vec[k]
+       sw       t1,0(t4)    #vec[k]=L[i]
+       
+       addi     s5,s5,1     #i++
+       addi     s7,s7,1     #k++
+       j        while1
+       
+else:
+       
+       sll      t0,s6,2     #escalo j: t0 = j*4
+       addu     t0,s4,t0    #t0 = direccion de R[j]
+       lw       t1,0(t0)    #cargo el valor de R[j] en t1
+       
+       sll      t2,s7,2     #escalo k: t2 = k*4
+       addu     t2,a0,t2    #t2 = direccion de vec[k]
+       sw       t1,0(t2)    #vec[k]=R[j]
+       
+       addi     s6,s6,1     #j++
+       addi     s7,s7,1     #k++
+       j        while1
