@@ -161,7 +161,7 @@ for_loop2:
 	sw	t6,0(t7)	#aux2[i] = vec[medio+i+1]
 
 	addu    t4,t4,1		#i++
-        b       for_loop_2
+        b       for_loop2
 
 
 
