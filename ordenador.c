@@ -19,6 +19,16 @@ void imprimir_enteros(int *enteros, size_t largo, FILE* salida);
 bool es_caracter_invalido(char caracter);
 
 
+
+
+/*Pre: Recibe un stream correctamente abierto en modo de lectura
+		y otro en modo escritura.
+ *Pos: En el caso que el stream de entrada tenga formato de lineas consecutivas
+ 		de numeros enteros separados por espacios. Ordena cada linea en modo ascendente
+ 		y dicho resultado lo imprime en el stream de salida. Devolviendo el flag "EXITO"
+ 		En caso que no se respete el formato se devuelve "FALLO"
+*/
+
 int ordenar(FILE* entrada, FILE* salida){
 
 	int flag_lectura = FLAG_CONTINUAR ;
@@ -45,16 +55,23 @@ int ordenar(FILE* entrada, FILE* salida){
 		free(linea);
 		}
 
-		if(flag_lectura== FLAG_LINEA_INVALIDA) return -1;
+		if(flag_lectura== FLAG_LINEA_INVALIDA) return FALLO;
 
-		return 0; 
+		return EXITO; 
 }
 
 
-/*Lee una linea, puede devolver :  LINEA INVALIDA; CONTINUAR O FIN DE ARCHIVO.
-EN EL CASO DE ENCONTRAR UN -1 TAMBIEN TIRA FIN DE ARCHIVO.
-	*/	
- int leer(FILE* stream, int *largo_linea, char** linea){
+/*POS: Recibe un file stream correctamente abierto en modo lectura.
+  Pre: Lee una linea de dicho stream, devolviendo por parametros la misma
+  		en forma de array de caracteres y el largo de la linea. En forma de retorno	
+  		devuelve un flag indicando el resultado de la lectura :
+  		FLAG_CONTINUAR:      En caso de que el archivo continue.
+  		FLAG_FIN_DE_ARCHIVO: En caso de encontrase con un EOF o una linea
+							que solo contenga -1(indicador para dejar de iterar).
+		FLAG_LINEA_INVALIDA: En que se haya tenido que detener la ejecucion debido a un
+							caracter invalido encontrado en el stream.
+*/	
+int leer(FILE* stream, int *largo_linea, char** linea){
 
 	int largo_buffer = 20;
 	*linea = (char*) malloc(sizeof(char) * largo_buffer); // Asigno un lugar en memoria para el linea.
@@ -70,7 +87,6 @@ EN EL CASO DE ENCONTRAR UN -1 TAMBIEN TIRA FIN DE ARCHIVO.
 
     	caracter = getc(stream); // Leo un caracter del stream.
     	if( es_caracter_invalido(caracter) ){
-    		 perror("en la entrada hay un caracter invalido");
     		 return FLAG_LINEA_INVALIDA; // Si lee un caracter que no corresponde, devuelve linea invalida.	
     	}
     	(*linea) [ (*largo_linea) ] = caracter; //Lo guardo en el linea.
@@ -90,7 +106,11 @@ EN EL CASO DE ENCONTRAR UN -1 TAMBIEN TIRA FIN DE ARCHIVO.
 		
 }
 
-
+/*Pre: Recibe un array de caracteres que contiene numeros enteros
+       separados por un espacio(Esto es previamente validado) junto con su largo.
+  Pos: Devuelve en forma de retorno el puntero a un array de enteros equivalente al de caracteres
+       Y por parametro devuelve su largo.
+*/
 int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros){
 
 	char temporal [MAX_DIGITOS];
@@ -126,18 +146,38 @@ int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros){
 	return enteros;
 }
 
+/*Pre: Recibe un caracter.
+  Pos: Devuelve TRUE si se encuentra un caracter que indice el fin de linea
+       (puede ser tanto EOF como EOL). 
+*/
 bool es_fin_de_linea(char caracter){
 
 	return(caracter == EOF || caracter == EOL);
 }
 
+
+/*Pre: Recibe un caracter.
+  Pos: Responde a la pregunta es numerico?(se considera el signo de menos como un valor numerico)
+*/
 bool es_numerico(char caracter){
 	return( (caracter >= '0' && caracter <= '9') || caracter=='-'); //incluye numeros negativos.
 }
+
+
+/*Pre: Recibe un caracter
+   Pos: Si el caracter es numerico, EOF, EOL o espacio devuelve TRUE.
+   		en otro caso devuelve FALSE. (dicho caracter no se deberia encontrar en el input)
+*/
 bool es_caracter_invalido(char caracter){
 	return !(es_numerico(caracter) || es_fin_de_linea(caracter) || caracter ==' ');
 }
 
+
+
+
+/*Pre: Recibe un array de enteros(pueden ser negativos) y su largo.
+  Pos: Lo ordena en forma ascendiente.
+*/
 void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
 
   int aux;
@@ -154,6 +194,11 @@ void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
   }
 }
 
+
+/*
+Pre : Recibe un array de enteros, su largo y un stream de salida.
+Pos:  "Imprime" dicho array en el stream.
+*/
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida){
 	for (int i = 0; i < largo; i++){
 		fprintf(salida, "%i ",enteros[i] );
