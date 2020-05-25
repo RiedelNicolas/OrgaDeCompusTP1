@@ -102,6 +102,8 @@ merge:
         jal     mymalloc	#devuelve en la posicion v0 un puntero a una direccion con espacio para guardar el vector aux1    
         addi    t2,v0,0		#t2 = aux1
         
+	lw	a2,48(fp)
+	lw	a3,52(fp)
 	subu    t1,a3,a2	#t1 = fin - medio, t1 = tope2 (longitud del segundo vector)
 	sll	a0,t1,2		#a0 = tope2*4
         jal     mymalloc	#devuelve en la posicion v0 un puntero a una direccion con espacio para guardar el vector aux2
