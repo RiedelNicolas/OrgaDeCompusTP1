@@ -46,6 +46,7 @@ int ordenar(FILE* entrada, FILE* salida){
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
 			merge_sort(enteros, (size_t) largo_enteros);
 			imprimir_enteros(enteros, largo_enteros, salida);
+
 			if(enteros[0] == -1 && largo_enteros == 1 ){
 				flag_lectura = FLAG_FIN_DE_ARCHIVO;
 			}
@@ -55,7 +56,7 @@ int ordenar(FILE* entrada, FILE* salida){
 		free(linea);
 		}
 
-		if(flag_lectura== FLAG_LINEA_INVALIDA) return FALLO;
+		if(flag_lectura == FLAG_LINEA_INVALIDA) return FALLO;
 
 		return EXITO; 
 }
@@ -93,12 +94,12 @@ int leer(FILE* stream, int *largo_linea, char** linea){
     	(*largo_linea)+=1; //Incremento mi tope.
 	}
 
-
+	/*
 	if( (*largo_linea) <=1 ){     // Siempre va a leer por lo menos un caracter, sea eof o fin de linea
 		return FLAG_LINEA_INVALIDA;
-	}
+	}*/
 
-	if(caracter == EOF){
+	if(caracter == EOF || (*largo_linea) <=1){// Siempre va a leer por lo menos un caracter, sea eof o fin de linea
 		return FLAG_FIN_DE_ARCHIVO;
 	}
 
@@ -179,19 +180,20 @@ bool es_caracter_invalido(char caracter){
   Pos: Lo ordena en forma ascendiente.
 */
 void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
+	if(len == 0 ) return;
 
-  int aux;
+	int aux;
 
-  for (size_t i = 0; i < (len-1); i++) {
-    for (size_t j = 0; j < (len-i-1); j++) {
-      if (vec[j] > vec[j+1]) {
-        // swap
-        aux      = vec[j];
-        vec[j]   = vec[j+1];
-        vec[j+1] = aux;
-      }
-    }
-  }
+	for (size_t i = 0; i < (len-1); i++){
+	    for (size_t j = 0; j < (len-i-1); j++){
+	    	if (vec[j] > vec[j+1]) {
+	        // swap
+	        aux      = vec[j];
+	        vec[j]   = vec[j+1];
+	        vec[j+1] = aux;
+	      }
+	    }
+	}
 }
 
 
@@ -200,6 +202,9 @@ Pre : Recibe un array de enteros, su largo y un stream de salida.
 Pos:  "Imprime" dicho array en el stream.
 */
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida){
+
+	if(largo == 0 ) return;
+
 	for (int i = 0; i < largo; i++){
 		fprintf(salida, "%i ",enteros[i] );
 	}

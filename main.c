@@ -28,6 +28,12 @@
 int mostrar_en_pantalla(char* ruta);
 void notificar_problema_ruta(char *ruta);
 
+
+
+
+
+
+
 int main(int argc, char** argv){
 
 	FILE* stream_entrada = NULL;
