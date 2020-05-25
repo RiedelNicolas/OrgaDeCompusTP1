@@ -95,8 +95,8 @@ merge:
 	sw      a2,48(fp)	#salvo el valor del medio
 	sw	a3,52(fp)	#salvo el valor del final
     	
-	subu    t0,a2,t0	#t0 = medio - inicio
-	addi    t0,a1,1		#t0 = medio - inicio + 1 , t0 = tope1 (longitud del primer vector)        
+	subu    t0,a2,a1	#t0 = medio - inicio
+	addi    t0,t0,1		#t0 = medio - inicio + 1 , t0 = tope1 (longitud del primer vector)        
 	sll	a0,t0,2		#a0 = tope1*4, (4 = sizeof(int))
         jal     mymalloc	#devuelve en la posicion v0 un puntero a una direccion con espacio para guardar el vector aux1    
         addi    t2,v0,0		#t2 = aux1
