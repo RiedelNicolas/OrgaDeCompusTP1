@@ -32,6 +32,7 @@ merge_sort:
 
 
 
+	.ent merge_sort_rec
 
 merge_sort_rec:
         .frame fp,40,ra
@@ -48,7 +49,6 @@ merge_sort_rec:
         slt     t0,a1,a2	#si a1<a2 entonces t0=1 sino t0=0
         beq     t0,0,return	#si t0=0 salto a return
 
-####puede haber overflow???(en la linea 2)
         add     t0,a1,a2	#t0 = inicio + final
         sra     t0,t0,1		#t0 = (inicio + final)/2, s0=medio
         sw      t0,16(fp)	#como medio es propio de cada scope se almacena en la LTA
@@ -80,9 +80,10 @@ return:
 
 
 
+	.ent merge
 
 merge:
-        .frame fp,40,ra
+        .frame 	fp,40,ra
         subu    sp,sp,40	#4(SRA) + 2(LTA) + 4(ABA)
       	.cprestore 24		#Saved register area.
       	sw      fp,28(sp)	#almaceno valor de fp a 28bytes del sp
