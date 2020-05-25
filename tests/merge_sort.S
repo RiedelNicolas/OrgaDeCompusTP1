@@ -50,7 +50,8 @@ merge_sort_rec:
         beq     t0,0,return	#si t0=0 salto a return
 
         add     t0,a1,a2	#t0 = inicio + final
-        sra     t0,t0,1		#t0 = (inicio + final)/2, s0=medio
+	subu	t0,t0,1		#t0 = inicio + final - 1
+        sra     t0,t0,1		#t0 = (inicio + final - 1)/2, s0=medio
         sw      t0,16(fp)	#como medio es propio de cada scope se almacena en la LTA
 
         addi    a2,t0,0		#establezco el medio como nuevo fin
