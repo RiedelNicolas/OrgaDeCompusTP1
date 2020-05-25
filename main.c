@@ -13,6 +13,11 @@
 #define COMANDO_VERSION "-V"
 #define RUTA_AYUDA "comandos/help.txt"
 #define RUTA_VERSION "comandos/version.txt"
+#define COMANDO_INPUT "-i"
+#define COMANDO_OUTPUT "-o"
+
+#define IDENTIFICADOR_STDOUT "-"
+#define IDENTIFICADOR_STDIN "-"
 
 #define EXITO  0
 #define FALLO -1
@@ -20,7 +25,12 @@
 
 int mostrar_en_pantalla(char* ruta);
 
+
 int main(int argc, char** argv){
+
+	FILE* stream_entrada = NULL;
+	FILE* stream_salida = NULL;
+	int flag_ordenamiento = NULL;
 
 	if(argc == 2){
 		if( !strcmp(argv[1],COMANDO_AYUDA) ){
@@ -33,22 +43,43 @@ int main(int argc, char** argv){
 			perror("Argumento invalido");
 			return FALLO;
 		}
+	}else if(argc == 5 ){ // -i input -o output
+		if( !strcmp(argv[1],COMANDO_INPUT) && !strcmp(argv[3],COMANDO_OUTPUT) ){
+			if(argv[2] ==IDENTIFICADOR_STDIN){
+				stream_entrada = stdin;
+			}else{
+				stream_entrada = fopen(argv[2], "r");
+				if(stream_entrada ==NULL){
+					perror("\nNo se puedo abrir el archivo de entrada");
+					return FALLO;
+				}
+			}
+			if(argv[4] ==IDENTIFICADOR_STDOUT){
+				stream_salida = stdout;
+			}else{
+				stream_salida =  fopen(argv[4],"w");
+				if(stream_salida == NULL){
+					perror("\nNo se puedo abrir el archivo de salida");
+					return FALLO;
+				}
+			}
+
+			flag_ordenamiento = ordenar(stream_entrada, stream_salida);
+
+			if(stream_salida != stdout) fclose(stream_salida);
+			if(stream_entrada != stdin ) fclose(stream_entrada);
+
+		}else{
+			perror("Formato de argumentos invalido");
+		}
+
+		if(flag_ordenamiento = FALLO )
 	}
-
-	FILE* stream_entrada = NULL;
-	FILE* stream_salida = NULL;
-
-	stream_entrada = fopen("tests/entrada.txt", "r");
-	stream_salida = fopen("tests/salida.txt", "w");
-
-	ordenar(stdin, stdout);
-	
-	fclose(stream_entrada);
-	fclose(stream_salida);
-	
 
 	return EXITO;
 }
+
+
 
 int mostrar_en_pantalla(char * ruta){
 	FILE* archivo = fopen(ruta,"r");
@@ -63,7 +94,7 @@ int mostrar_en_pantalla(char * ruta){
 		caracter = fgetc(archivo);
 		if(caracter !=EOF) putc(caracter, stdout);
 	}
-	
+
 	fclose(archivo);
 	return FALLO;
 }
