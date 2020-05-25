@@ -19,7 +19,7 @@ merge_sort:
 	move	a2,t0
 	move	a1,zero
 
-	jal	merge_sort
+	jal	merge_sort_rec
 
 	lw      ra,32(sp)	
         lw	gp,24(sp)
@@ -125,13 +125,13 @@ for_loop:
 	addu	t5,a1,t4	#t5 = inicio + i
 	sll	t5,t5,2		#escalo t5
 	addu	t6,a0,t5	#t6 = vec + (inicio+i) escalado
-	lw	t6,0(t6)	#t6 = vec[inicio+i]	esto puede fallar
+	lw	t7,0(t6)	#t7 = vec[inicio+i]	esto puede fallar
 
 	sll	t5,t4,2			
-	addu	t7,t2,t5	#t7 = aux1 + i escalado
-	lw	t7,0(t7)	#t7 = aux1[i]		esto puede fallar	
+	addu	t6,t2,t5	#t7 = aux1 + i escalado
+	lw	t8,0(t6)	#t8 = aux1[i]		esto puede fallar	
         
-	sw	t6,0(t7)	#aux1[i] = vec[inicio+i]
+	sw	t7,0(t8)	#aux1[i] = vec[inicio+i]
 
 	addu    t4,t4,1		#i++
         b       for_loop
@@ -152,13 +152,13 @@ for_loop2:
 	addu	t5,t5,a2	#t5 = medio + i + 1 
 	sll	t5,t5,2		#escalo t5
 	addu	t6,a0,t5	#t6 = vec + (medio+i+1) escalado
-	lw	t6,0(t6)	#t6 = vec[medio+i+1]	esto puede fallar
+	lw	t7,0(t6)	#t7 = vec[medio+i+1]	esto puede fallar
 
 	sll	t5,t4,2			
-	addu	t7,t3,t5	#t7 = aux2 + i escalado
-	lw	t7,0(t7)	#t7 = aux2[i]		esto puede fallar	
+	addu	t6,t3,t5	#t7 = aux2 + i escalado
+	lw	t8,0(t6)	#t8 = aux2[i]		esto puede fallar	
         
-	sw	t6,0(t7)	#aux2[i] = vec[medio+i+1]
+	sw	t7,0(t8)	#aux2[i] = vec[medio+i+1]
 
 	addu    t4,t4,1		#i++
         b       for_loop2
@@ -184,24 +184,24 @@ while1:
 if:
        	sll     t0,t4,2		#escalo i: t0 = i*4
        	addu    t0,t2,t0	#t0 = direccion de aux1[i]
-       	lw      t0,0(t0)	#cargo el valor de aux1[i] en t0, puede fallar
+       	lw      t1,0(t0)	#cargo el valor de aux1[i] en t1, puede fallar
        
-       	sll     t1,t5,2		#escalo j: t1 = j*4
-       	addu    t1,t3,t1	#t1 = direccion de aux2[j]
-       	lw      t1,0(t1)	#cargo el valor de aux2[j] en t1, puede fallar
+       	sll     t0,t5,2		#escalo j: t0 = j*4
+       	addu    t0,t3,t0	#t0 = direccion de aux2[j]
+       	lw      t7,0(t0)	#cargo el valor de aux2[j] en t7, puede fallar
 
-       	sll     t7,t6,2		#escalo k: t6 = k*4
-       	addu    t7,a0,t7	#t6 = direccion de vec[k]
+       	sll     t0,t6,2		#escalo k: t0 = k*4
+       	addu    t0,a0,t0	#t0 = direccion de vec[k]
        
-       	blt     t1,t0,else	#si aux2[j]<aux1[i] salto a else
+       	blt     t7,t1,else	#si aux2[j]<aux1[i] salto a else
 
-       	sw      t0,0(t7)	#vec[k]=aux1[i]
+       	sw      t1,0(t0)	#vec[k]=aux1[i]
        	addi    t4,t4,1		#i++
        	addi    t6,t6,1		#k++
        	b       while1
        
 else:
-       	sw      t1,0(t7)	#vec[k]=aux2[j]
+       	sw      t7,0(t0)	#vec[k]=aux2[j]
        	addi    t5,t5,1		#j++
        	addi    t6,t6,1		#k++
        	b       while1
@@ -216,13 +216,13 @@ pre_loop_3:
 while2:
 	ble	t0,t4,pre_loop_4 #si tope1<=i salto a pre_loop_4
 	
-	sll     t1,t4,2		#escalo i: t0 = i*4
-       	addu    t1,t2,t1	#t0 = direccion de aux1[i]
-       	lw      t1,0(t1)	#cargo el valor de aux1[i] en t1
+	sll     t1,t4,2		#escalo i: t1 = i*4
+       	addu    t1,t2,t1	#t1 = direccion de aux1[i]
+       	lw      t7,0(t1)	#cargo el valor de aux1[i] en t7
 	
-	sll     t7,t6,2		#escalo k: t6 = k*4
-       	addu    t7,a0,t7	#t6 = direccion de vec[k]
-	sw      t1,0(t7)	#vec[k]=aux1[i]
+	sll     t1,t6,2		#escalo k: t1 = k*4
+       	addu    t1,a0,t1	#t1 = direccion de vec[k]
+	sw      t7,0(t1)	#vec[k]=aux1[i]
 
 	addi    t4,t4,1		#i++
        	addi    t6,t6,1		#k++
@@ -239,12 +239,12 @@ while3:
 	ble	t1,t5,_return	#si tope2<=j salto a _return
 	
 	sll	t0,t5,2		#escalo j: t0 = j*4
-	addu    t0,t3,t0	#t1 = direccion de aux2[j]
-       	lw      t0,0(t0)	#cargo el valor de aux2[j] en t1, puede fallar
+	addu    t0,t3,t0	#t0 = direccion de aux2[j]
+       	lw      t7,0(t0)	#cargo el valor de aux2[j] en t7, puede fallar
 	
-	sll     t7,t6,2		#escalo k: t6 = k*4
-       	addu    t7,a0,t7	#t6 = direccion de vec[k]
-	sw      t0,0(t7)	#vec[k]=aux1[i]
+	sll     t0,t6,2		#escalo k: t0 = k*4
+       	addu    t0,a0,t0	#t0 = direccion de vec[k]
+	sw      t7,0(t0)	#vec[k]=aux1[i]
        
 	addi	t5,t5,1		#j++
 	addi	t6,t6,1		#k++
