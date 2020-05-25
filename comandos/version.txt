@@ -1,33 +1,10 @@
-Tenes tres teclados al pedo
-Y un negro que grita miau!
-Lavataper gato, negro
-te cansaste de robar...me todos los punteos
-Esta zaarpado de rastrero
-esta cancion te voy a dedicar
+OrgaDeCompusTP1
 
-Te pones cartel de chorro
-Y sos un tranza nada mas
-Si hiciste tantos hechos
-Decime en que penal
-Cuantos años estuviste preso
-Tus antecedentes no te ayudan
-Te acordas cuando cantabas en los Chudas?
-En ese grupo de mierda que parecia Yerba Brava, Volcán
+Integrantes
+Chiara Bauni 102981
+Gonzalo Martinez Sastre 102321
+Nicolas Riedel 102130
 
-Y te pones cartel de chorro
-Sos una rata nada mas
-Y te pones cartel de chorro
-Sos una rata nada mas
+Codigo disponible en : https://github.com/RiedelNicolas/OrgaDeCompusTP1
 
-Cuando fuistes hasta el Puebor
-Te vinistes a gilar
-Te cayeron los pibes chorros
-Los pibes chorros de verdad
-Denunciaste a los pibitos
-Y revisaste los bolsitos
-Sos un ortiva nada mas
 
-Me da mucha mucha risa
-Mira los pungas como revisan
-Y si cae la petisa
-Mira los pungas como revisan

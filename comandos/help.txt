@@ -1,39 +1,18 @@
-Hoy llegue muy temprano a la casa de chola
-Por que mi hijo muy solo nos dejara
-Por que papá y mamá se van para el cine
-Y hasta la madrugada no volveran
-Pero mi timidez no tiene remedio
-Y ella que me conoce empezo a atacar
+Comandos:
+Ejemplos de uso:
+ejecutable -h
+ejecutable -V
+ejecutable -i in_file -o out_file
 
-¿Pero qué quiere la chola?
-Lo que quiere es que la besen
-¿Pero que quiere la chola?
-Lo que quiere es que la abrazen
-Que quiere que quiere que quiere que la besen
-Que quiere que quiere que quieren que la abracen
-Que quiere que quiere que quiere que la besen
-Que quiere que quiere que quiere que la abracen
-¿Pero que quiere la chola?
-Lo que quiere es que la besen
-¿Pero que quiere la chola?
-Lo que quiere es qu la bracen
 
-Ya no tengo palaberas para decirle
-Que no se ponga asi que pueden volver
-Pero ya no me escucha esta en otro mundo
-No tengo escapatoria que voy a hacer
-Cuanto más ser me acerca más me confundo
-Creo que en cualquier momento voy a perder
+-V, --version
+Imprime la version del programa y finaliza la ejecucion.
+-h, --help
+Muestra esto por pantalla y finaliza la ejecucion.
+-i, --input
+Especificar la ruta para el archivo de entrada, "-" para stdin.
+-o, --output
+Especificar la ruta para el archivo de salida, "-" para stdout.
 
-¿Pero que quiere la chola?
-Lo que quiere es que la besen
-¿Pero que quiere la chola?
-Lo que quiere es que la abrazen
-Que quiere que quiere que quiere que la besen
-Que quiere que quiere que quieren que la abracen
-Que quiere que quiere que quiere que la besen
-Que quiere que quiere que quiere que la abracen
-¿Pero que quiere la chola?
-Lo que quiere es que la besen
-¿Pero que quiere la chola?
-Lo que quiere es que la abracen
+
+
