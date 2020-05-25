@@ -8,15 +8,22 @@
 #define MAX_MENSAJE 150
 #define EOL '\n'
 
-#define COMANDO_AYUDA "-h"
-#define COMANDO_VERSION "-V"
+#define COMANDO_AYUDA_CORTO "-h"
+#define COMANDO_VERSION_CORTO "-V"
+#define COMANDO_AYUDA_LARGO "--help"
+#define COMANDO_VERSION_LARGO "--version"
+
 #define RUTA_AYUDA "comandos/help.txt"
 #define RUTA_VERSION "comandos/version.txt"
-#define COMANDO_INPUT "-i"
-#define COMANDO_OUTPUT "-o"
+
+#define COMANDO_INPUT_CORTO "-i"
+#define COMANDO_OUTPUT_CORTO "-o"
+#define COMANDO_INPUT_LARGO "--input"
+#define COMANDO_OUTPUT_LARGO "--output"
 
 #define IDENTIFICADOR_STDOUT "-"
 #define IDENTIFICADOR_STDIN "-"
+#
 
 
 #define MENSAJE_COMANDO_INVALIDO "\nEl comando usado es invalido, use -h para ayuda"
@@ -27,6 +34,11 @@
 
 int mostrar_en_pantalla(char* ruta);
 void notificar_problema_ruta(char *ruta);
+
+bool es_comando_ayuda(char* comando);
+bool es_comando_version(char* comando);
+bool es_comando_input(char* comando);
+bool es_comando_output(char* comando);
 
 
 
@@ -41,18 +53,18 @@ int main(int argc, char** argv){
 	int flag_ordenamiento = -1;
 
 	if(argc == 2){
-		if( !strcmp(argv[1],COMANDO_AYUDA) ){
+		if( es_comando_ayuda(argv[1]) ){
 
 			return mostrar_en_pantalla(RUTA_AYUDA);
 
-		}else if( !strcmp(argv[1],COMANDO_VERSION) ){
+		}else if( es_comando_version(argv[1]) ){
 			return mostrar_en_pantalla(RUTA_VERSION);
 		}else{
 			perror(MENSAJE_COMANDO_INVALIDO);
 			return FALLO;
 		}
 	}else if(argc == 5 ){ // -i input -o output
-		if( (!strcmp(argv[1],COMANDO_INPUT)) && (!strcmp(argv[3],COMANDO_OUTPUT)) ){
+		if( es_comando_input(argv[1]) && es_comando_output(argv[3]) ){
 			if( !strcmp(argv[2], IDENTIFICADOR_STDIN) ){
 				stream_entrada = stdin;
 			}else{
@@ -98,6 +110,22 @@ int main(int argc, char** argv){
 
 
 
+bool es_comando_ayuda(char* comando){
+	return( !strcmp(comando,COMANDO_AYUDA_LARGO) || !strcmp(comando,COMANDO_AYUDA_CORTO) );
+}
+
+bool es_comando_version(char* comando){
+	return( !strcmp(comando,COMANDO_VERSION_LARGO) || !strcmp(comando,COMANDO_VERSION_CORTO) );
+}
+
+bool es_comando_input(char* comando){
+	return( !strcmp(comando,COMANDO_INPUT_LARGO) || !strcmp(comando,COMANDO_INPUT_CORTO) );			
+
+}
+
+bool es_comando_output(char* comando){
+	return( !strcmp(comando,COMANDO_OUTPUT_LARGO) || !strcmp(comando,COMANDO_OUTPUT_CORTO) );	
+}
 
 int mostrar_en_pantalla(char * ruta){
 	FILE* archivo = fopen(ruta,"r");
