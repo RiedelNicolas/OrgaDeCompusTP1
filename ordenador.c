@@ -27,7 +27,7 @@ int ordenar(FILE* entrada, FILE* salida){
 	int largo_linea = 0;
 	char* linea = NULL;
 
-	while(flag_lectura != FLAG_LINEA_INVALIDA){
+	while(flag_lectura == FLAG_CONTINUAR){
 
 		flag_lectura = leer(entrada, &largo_linea, &linea);
 		
@@ -35,7 +35,10 @@ int ordenar(FILE* entrada, FILE* salida){
 
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
 			merge_sort(enteros, (size_t) largo_enteros);
-			imprimir_enteros(enteros, largo_enteros, salida); 
+			imprimir_enteros(enteros, largo_enteros, salida);
+			if(enteros[0] == -1 && largo_enteros == 1 ){
+				flag_lectura = FLAG_FIN_DE_ARCHIVO;
+			}
 			free(enteros);
 		}
 
