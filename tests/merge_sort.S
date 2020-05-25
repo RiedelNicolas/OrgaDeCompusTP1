@@ -1,4 +1,5 @@
-#include <regdef.h>
+#include <sys/regdef.h>
+#include <sys/syscall.h>
 
         .abicalls
         .text
@@ -7,6 +8,32 @@
         .ent merge_sort
 
 merge_sort:
+	.frame fp,40,ra
+        subu    sp,sp,40	#4(SRA) + 2(LTA) + 4(ABA)
+      	.cprestore 24		#Saved register area.
+      	sw      fp,28(sp)	#almaceno valor de fp a 28bytes del sp
+      	sw      ra,32(sp)
+	move    fp,sp		#fp = sp
+
+	sub	t0,a1,1		#t0 = len - 1
+	move	a2,t0
+	move	a1,zero
+
+	jal	merge_sort
+
+	lw      ra,32(sp)	
+        lw	gp,24(sp)
+      	lw      fp,28(sp)
+      	addu   	sp,sp,40
+      	jr      ra
+
+	.end	merge_sort
+
+
+
+
+
+merge_sort_rec:
         .frame fp,40,ra
         subu    sp,sp,40	#4(SRA) + 2(LTA) + 4(ABA)
       	.cprestore 24		#Saved register area.
@@ -27,13 +54,13 @@ merge_sort:
         sw      t0,16(fp)	#como medio es propio de cada scope se almacena en la LTA
 
         addi    a2,t0,0		#establezco el medio como nuevo fin
-        jal     merge_sort	#tomo la primera mitad del vector y aplico merge sort
+        jal     merge_sort_rec	#tomo la primera mitad del vector y aplico merge sort
 
         lw      t0,16(fp)	#cargo medio en t0
         lw      a2,48(fp)	#cargo en a2 el valor de fin
         addi    t0,t0,1		#sumo t0=t0+1
         addi    a1,t0,0		#establezco el nuevo inicio como el medio
-        jal     merge_sort	#tomo la segunda mitad del vector y aplico merge sort
+        jal     merge_sort_rec	#tomo la segunda mitad del vector y aplico merge sort
 
         lw      a1,44(fp)	#cargo en a1 el valor del inicio
         lw      a2,16(fp)	#cargo en a2 el valor del medio
@@ -47,7 +74,7 @@ return:
       	addu   	sp,sp,40
       	jr      ra
 
-	.end	merge_sort
+	.end	merge_sort_rec
 
 
 
@@ -228,6 +255,8 @@ _return:
 	move	a0,t3		#a0 = aux2
 	jal	myfree		#libero memoria de aux2[]
 	lw      ra,32(sp)	
+
+
         lw	gp,24(sp)
       	lw      fp,28(sp)
       	addu	sp,sp,40
