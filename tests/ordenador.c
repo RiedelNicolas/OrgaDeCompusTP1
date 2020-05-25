@@ -9,27 +9,16 @@
 
 
 
-int ordenar(FILE* entrada, FILE* salida);
+void ordenar(FILE* entrada, FILE* salida);
 int leer (FILE* stream, int *largo_linea, char** linea);
 int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros);
 bool es_fin_de_linea(char caracter);
 bool es_numerico(char caracter);
-extern void merge_sort(int *vec, int inicio, int fin);
+void merge_sort(int *vec, size_t inicio, size_t fin);
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida);
-bool es_caracter_invalido(char caracter);
 
 
-
-
-/*Pre: Recibe un stream correctamente abierto en modo de lectura
-		y otro en modo escritura.
- *Pos: En el caso que el stream de entrada tenga formato de lineas consecutivas
- 		de numeros enteros separados por espacios. Ordena cada linea en modo ascendente
- 		y dicho resultado lo imprime en el stream de salida. Devolviendo el flag "EXITO"
- 		En caso que no se respete el formato se devuelve "FALLO"
-*/
-
-int ordenar(FILE* entrada, FILE* salida){
+void ordenar(FILE* entrada, FILE* salida){
 
 	int flag_lectura = FLAG_CONTINUAR ;
 	int *enteros = NULL;
@@ -41,38 +30,21 @@ int ordenar(FILE* entrada, FILE* salida){
 
 		flag_lectura = leer(entrada, &largo_linea, &linea);
 
-		if(flag_lectura != FLAG_LINEA_INVALIDA ){
+		if(flag_lectura !=FLAG_LINEA_INVALIDA ){
 
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
-			merge_sort(enteros, 0,largo_enteros-1);
+			merge_sort(enteros, 0, (size_t) largo_enteros-1);
 			imprimir_enteros(enteros, largo_enteros, salida);
-
-			if(enteros[0] == -1 && largo_enteros == 1 ){
-				flag_lectura = FLAG_FIN_DE_ARCHIVO;
-			}
 			free(enteros);
 		}
 
 		free(linea);
-		}
+	}
 
-		if(flag_lectura == FLAG_LINEA_INVALIDA) return FALLO;
-
-		return EXITO;
 }
 
 
-/*POS: Recibe un file stream correctamente abierto en modo lectura.
-  Pre: Lee una linea de dicho stream, devolviendo por parametros la misma
-  		en forma de array de caracteres y el largo de la linea. En forma de retorno
-  		devuelve un flag indicando el resultado de la lectura :
-  		FLAG_CONTINUAR:      En caso de que el archivo continue.
-  		FLAG_FIN_DE_ARCHIVO: En caso de encontrase con un EOF o una linea
-							que solo contenga -1(indicador para dejar de iterar).
-		FLAG_LINEA_INVALIDA: En que se haya tenido que detener la ejecucion debido a un
-							caracter invalido encontrado en el stream.
-*/
-int leer(FILE* stream, int *largo_linea, char** linea){
+ int leer(FILE* stream, int *largo_linea, char** linea){
 
 	int largo_buffer = 20;
 	*linea = (char*) malloc(sizeof(char) * largo_buffer); // Asigno un lugar en memoria para el linea.
@@ -87,47 +59,28 @@ int leer(FILE* stream, int *largo_linea, char** linea){
     	}
 
     	caracter = getc(stream); // Leo un caracter del stream.
-    	if( es_caracter_invalido(caracter) ){
-    		 return FLAG_LINEA_INVALIDA; // Si lee un caracter que no corresponde, devuelve linea invalida.
-    	}
     	(*linea) [ (*largo_linea) ] = caracter; //Lo guardo en el linea.
     	(*largo_linea)+=1; //Incremento mi tope.
 	}
 
-	/*
+
+
+
+
 	if( (*largo_linea) <=1 ){     // Siempre va a leer por lo menos un caracter, sea eof o fin de linea
 		return FLAG_LINEA_INVALIDA;
-	}*/
+	}
 
-	if(caracter == EOF || (*largo_linea) <=1){// Siempre va a leer por lo menos un caracter, sea eof o fin de linea
+	if(caracter == EOF){
 		return FLAG_FIN_DE_ARCHIVO;
 	}
 
+
 	return 	FLAG_CONTINUAR;
-// void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
-// if(len == 0 ) return;
-//
-// int aux;
-//
-// for (size_t i = 0; i < (len-1); i++){
-//     for (size_t j = 0; j < (len-i-1); j++){
-//     	if (vec[j] > vec[j+1]) {
-//         // swap
-//         aux      = vec[j];
-//         vec[j]   = vec[j+1];
-//         vec[j+1] = aux;
-//       }
-//     }
-// }
-// }
 
 }
 
-/*Pre: Recibe un array de caracteres que contiene numeros enteros
-       separados por un espacio(Esto es previamente validado) junto con su largo.
-  Pos: Devuelve en forma de retorno el puntero a un array de enteros equivalente al de caracteres
-       Y por parametro devuelve su largo.
-*/
+
 int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros){
 
 	char temporal [MAX_DIGITOS];
@@ -163,64 +116,75 @@ int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros){
 	return enteros;
 }
 
-/*Pre: Recibe un caracter.
-  Pos: Devuelve TRUE si se encuentra un caracter que indice el fin de linea
-       (puede ser tanto EOF como EOL).
-*/
 bool es_fin_de_linea(char caracter){
 
 	return(caracter == EOF || caracter == EOL);
 }
 
-
-/*Pre: Recibe un caracter.
-  Pos: Responde a la pregunta es numerico?(se considera el signo de menos como un valor numerico)
-*/
 bool es_numerico(char caracter){
-	return( (caracter >= '0' && caracter <= '9') || caracter=='-'); //incluye numeros negativos.
+	return(caracter >= '0' && caracter <= '9' );
 }
 
+// Merge two subarrays L and M into arr
+void merge(int arr[], size_t p, size_t q, size_t r) {
 
-/*Pre: Recibe un caracter
-   Pos: Si el caracter es numerico, EOF, EOL o espacio devuelve TRUE.
-   		en otro caso devuelve FALSE. (dicho caracter no se deberia encontrar en el input)
-*/
-bool es_caracter_invalido(char caracter){
-	return !(es_numerico(caracter) || es_fin_de_linea(caracter) || caracter ==' ');
+  // Create L ← A[p..q] and M ← A[q+1..r]
+  int n1 = q - p + 1;
+  int n2 = r - q;
+
+  int L[n1], M[n2];
+
+  for (int i = 0; i < n1; i++)
+    L[i] = arr[p + i];
+  for (int j = 0; j < n2; j++)
+    M[j] = arr[q + 1 + j];
+
+  // Maintain current index of sub-arrays and main array
+  int i, j, k;
+  i = 0;
+  j = 0;
+  k = p;
+
+  // Until we reach either end of either L or M, pick larger among
+  // elements L and M and place them in the correct position at A[p..r]
+  while (i < n1 && j < n2) {
+    if (L[i] <= M[j]) {
+      arr[k] = L[i];
+      i++;
+    } else {
+      arr[k] = M[j];
+      j++;
+    }
+    k++;
+  }
+
+  // When we run out of elements in either L or M,
+  // pick up the remaining elements and put in A[p..r]
+  while (i < n1) {
+    arr[k] = L[i];
+    i++;
+    k++;
+  }
+
+  while (j < n2) {
+    arr[k] = M[j];
+    j++;
+    k++;
+  }
+}
+void merge_sort(int *vec, size_t inicio, size_t fin){
+
+  if(inicio<fin){
+    int medio = (inicio+fin-1)/2;
+
+    merge_sort(vec, inicio, medio);
+    merge_sort(vec, medio+1, fin);
+
+    merge(vec, inicio, medio, fin);
+  }
 }
 
-
-
-
-/*Pre: Recibe un array de enteros(pueden ser negativos) y su largo.
-  Pos: Lo ordena en forma ascendiente.
-*/
-// void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
-// if(len == 0 ) return;
-//
-// int aux;
-//
-// for (size_t i = 0; i < (len-1); i++){
-//     for (size_t j = 0; j < (len-i-1); j++){
-//     	if (vec[j] > vec[j+1]) {
-//         // swap
-//         aux      = vec[j];
-//         vec[j]   = vec[j+1];
-//         vec[j+1] = aux;
-//       }
-//     }
-// }
-// }
-
-
-/*
-Pre : Recibe un array de enteros, su largo y un stream de salida.
-Pos:  "Imprime" dicho array en el stream.
-*/
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida){
-
-	if(largo == 0 ) return;
-
 	for (int i = 0; i < largo; i++){
 		fprintf(salida, "%i ",enteros[i] );
 	}
