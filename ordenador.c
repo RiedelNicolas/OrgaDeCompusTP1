@@ -16,6 +16,7 @@ bool es_fin_de_linea(char caracter);
 bool es_numerico(char caracter);
 void merge_sort(int *vec, size_t len);
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida);
+bool es_caracter_invalido(char caracter);
 
 
 int ordenar(FILE* entrada, FILE* salida){
@@ -26,11 +27,11 @@ int ordenar(FILE* entrada, FILE* salida){
 	int largo_linea = 0;
 	char* linea = NULL;
 
-	while(flag_lectura == FLAG_CONTINUAR){
+	while(flag_lectura != FLAG_LINEA_INVALIDA){
 
 		flag_lectura = leer(entrada, &largo_linea, &linea);
 		
-		if(flag_lectura !=FLAG_LINEA_INVALIDA ){
+		if(flag_lectura != FLAG_LINEA_INVALIDA ){
 
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
 			merge_sort(enteros, (size_t) largo_enteros);
@@ -40,10 +41,16 @@ int ordenar(FILE* entrada, FILE* salida){
 
 		free(linea);
 		}
-		return 0;
-	}
+
+		if(flag_lectura== FLAG_LINEA_INVALIDA) return -1;
+
+		return 0; 
+}
 
 
+/*Lee una linea, puede devolver :  LINEA INVALIDA; CONTINUAR O FIN DE ARCHIVO.
+EN EL CASO DE ENCONTRAR UN -1 TAMBIEN TIRA FIN DE ARCHIVO.
+	*/	
  int leer(FILE* stream, int *largo_linea, char** linea){
 
 	int largo_buffer = 20;
@@ -59,12 +66,13 @@ int ordenar(FILE* entrada, FILE* salida){
     	}
 
     	caracter = getc(stream); // Leo un caracter del stream.
+    	if( es_caracter_invalido(caracter) ){
+    		 perror("en la entrada hay un caracter invalido");
+    		 return FLAG_LINEA_INVALIDA; // Si lee un caracter que no corresponde, devuelve linea invalida.	
+    	}
     	(*linea) [ (*largo_linea) ] = caracter; //Lo guardo en el linea.
     	(*largo_linea)+=1; //Incremento mi tope.
 	}
-
-
-
 
 
 	if( (*largo_linea) <=1 ){     // Siempre va a leer por lo menos un caracter, sea eof o fin de linea
@@ -74,7 +82,6 @@ int ordenar(FILE* entrada, FILE* salida){
 	if(caracter == EOF){
 		return FLAG_FIN_DE_ARCHIVO;
 	}
-
 
 	return 	FLAG_CONTINUAR;
 		
@@ -122,7 +129,10 @@ bool es_fin_de_linea(char caracter){
 }
 
 bool es_numerico(char caracter){
-	return(caracter >= '0' && caracter <= '9' );
+	return( (caracter >= '0' && caracter <= '9') || caracter=='-'); //incluye numeros negativos.
+}
+bool es_caracter_invalido(char caracter){
+	return !(es_numerico(caracter) || es_fin_de_linea(caracter) || caracter ==' ');
 }
 
 void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
