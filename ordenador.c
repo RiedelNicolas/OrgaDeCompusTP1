@@ -9,7 +9,7 @@
 
 
 
-void ordenar(FILE* entrada, FILE* salida);
+int ordenar(FILE* entrada, FILE* salida);
 int leer (FILE* stream, int *largo_linea, char** linea);
 int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros);
 bool es_fin_de_linea(char caracter);
@@ -18,7 +18,7 @@ void merge_sort(int *vec, size_t len);
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida);
 
 
-void ordenar(FILE* entrada, FILE* salida){
+int ordenar(FILE* entrada, FILE* salida){
 
 	int flag_lectura = FLAG_CONTINUAR ;
 	int *enteros = NULL;
@@ -39,9 +39,9 @@ void ordenar(FILE* entrada, FILE* salida){
 		}
 
 		free(linea);
+		}
+		return 0;
 	}
-	
-}
 
 
  int leer(FILE* stream, int *largo_linea, char** linea){

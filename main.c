@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
 	FILE* stream_entrada = NULL;
 	FILE* stream_salida = NULL;
-	int flag_ordenamiento = NULL;
+	int flag_ordenamiento = -1;
 
 	if(argc == 2){
 		if( !strcmp(argv[1],COMANDO_AYUDA) ){
@@ -44,8 +44,8 @@ int main(int argc, char** argv){
 			return FALLO;
 		}
 	}else if(argc == 5 ){ // -i input -o output
-		if( !strcmp(argv[1],COMANDO_INPUT) && !strcmp(argv[3],COMANDO_OUTPUT) ){
-			if(argv[2] ==IDENTIFICADOR_STDIN){
+		if( (!strcmp(argv[1],COMANDO_INPUT)) && (!strcmp(argv[3],COMANDO_OUTPUT)) ){
+			if( !strcmp(argv[2], IDENTIFICADOR_STDIN) ){
 				stream_entrada = stdin;
 			}else{
 				stream_entrada = fopen(argv[2], "r");
@@ -54,7 +54,7 @@ int main(int argc, char** argv){
 					return FALLO;
 				}
 			}
-			if(argv[4] ==IDENTIFICADOR_STDOUT){
+			if( !strcmp(argv[4], IDENTIFICADOR_STDOUT) ){
 				stream_salida = stdout;
 			}else{
 				stream_salida =  fopen(argv[4],"w");
@@ -71,9 +71,15 @@ int main(int argc, char** argv){
 
 		}else{
 			perror("Formato de argumentos invalido");
+			return FALLO;
 		}
+	}else{
+		perror("Cantidad de argumentos invalida");
+		return FALLO;
+	}
 
-		if(flag_ordenamiento = FALLO )
+	if(flag_ordenamiento == FALLO){
+		return FALLO;
 	}
 
 	return EXITO;

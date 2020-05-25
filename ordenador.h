@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 
-void ordenar(FILE* entrada, FILE* salida);
+int ordenar(FILE* entrada, FILE* salida);
 
 
 
