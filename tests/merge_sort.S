@@ -84,41 +84,47 @@ return:
 	.ent merge
 
 merge:
-        .frame 	fp,40,ra
-        subu    sp,sp,40	#4(SRA) + 2(LTA) + 4(ABA)
-      	.cprestore 24		#Saved register area.
-      	sw      fp,28(sp)	#almaceno valor de fp a 28bytes del sp
-      	sw      ra,32(sp)
+        .frame 	fp,48,ra
+        subu    sp,sp,48	#4(SRA) + 4(LTA) + 4(ABA)
+      	.cprestore 32		#Saved register area.
+      	sw      fp,36(sp)	#almaceno valor de fp a 28bytes del sp
+      	sw      ra,40(sp)
 	move    fp,sp		#fp = sp
 
-      	sw      a0,40(fp)	#salvo *vec
-      	sw      a1,44(fp)	#salvo el valor del inicio
-	sw      a2,48(fp)	#salvo el valor del medio
-	sw	a3,52(fp)	#salvo el valor del final
+      	sw      a0,48(fp)	#salvo *vec
+      	sw      a1,52(fp)	#salvo el valor del inicio
+	sw      a2,56(fp)	#salvo el valor del medio
+	sw	a3,60(fp)	#salvo el valor del final
     	
 	subu    t0,a2,a1	#t0 = medio - inicio
 	addi    t0,t0,1		#t0 = medio - inicio + 1 , t0 = tope1 (longitud del primer vector)        
+	sw 	t0,16(fp)	#guardo tope1 en 16(fp) LTA	
 	sll	a0,t0,2		#a0 = tope1*4, (4 = sizeof(int))
         jal     mymalloc	#devuelve en la posicion v0 un puntero a una direccion con espacio para guardar el vector aux1    
-        addi    t2,v0,0		#t2 = aux1
+        sw      v0,24(fp)       #guardo aux1 en LTA
         
-	lw	a2,48(fp)
-	lw	a3,52(fp)
+	lw	a2,56(fp)
+	lw	a3,60(fp)
 	subu    t1,a3,a2	#t1 = fin - medio, t1 = tope2 (longitud del segundo vector)
+	sw 	t1,20(fp)	#guardo tope2 en LTA
 	sll	a0,t1,2		#a0 = tope2*4
         jal     mymalloc	#devuelve en la posicion v0 un puntero a una direccion con espacio para guardar el vector aux2
-        addi    t3,v0,0		#t3 = aux2
+        sw      v0,28(fp)	#guardo aux2 en LTA
 
-        lw      a0,40(fp)
-	lw      a1,44(fp)	
-	lw      a2,48(fp)	
-	lw	a3,52(fp)		
+
+
+
+        lw      a0,48(fp)	#a0 = *vec
+	lw      a1,52(fp)	#a1 = inicio
+	lw      a2,56(fp)	#a2 = medio
+	lw	a3,60(fp)	#a3 = fin
+
+	lw	t0,16(fp)	#t0 = tope1
+	lw	t1,20(fp)	#t1 = tope2
+	lw	t2,24(fp)	#t2 = aux1
+	move	t3,v0		#t3 = aux2		
 
 	move    t4,zero		#t4 = 0, t4 = i
-
-
-
-
 
 for_loop:
 
