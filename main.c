@@ -23,7 +23,7 @@
 
 #define IDENTIFICADOR_STDOUT "-"
 #define IDENTIFICADOR_STDIN "-"
-#
+
 
 
 #define MENSAJE_COMANDO_INVALIDO "\nEl comando usado es invalido, use -h para ayuda"
@@ -109,24 +109,38 @@ int main(int argc, char** argv){
 
 
 
-
+/*Pre: Recibe un string.
+  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a ayuda.
+*/
 bool es_comando_ayuda(char* comando){
 	return( !strcmp(comando,COMANDO_AYUDA_LARGO) || !strcmp(comando,COMANDO_AYUDA_CORTO) );
 }
 
+/*Pre: Recibe un string.
+  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a version.
+*/
 bool es_comando_version(char* comando){
 	return( !strcmp(comando,COMANDO_VERSION_LARGO) || !strcmp(comando,COMANDO_VERSION_CORTO) );
 }
 
+/*Pre: Recibe un string.
+  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a input.
+*/
 bool es_comando_input(char* comando){
 	return( !strcmp(comando,COMANDO_INPUT_LARGO) || !strcmp(comando,COMANDO_INPUT_CORTO) );			
 
 }
 
+/*Pre: Recibe un string.
+  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a output.
+*/
 bool es_comando_output(char* comando){
 	return( !strcmp(comando,COMANDO_OUTPUT_LARGO) || !strcmp(comando,COMANDO_OUTPUT_CORTO) );	
 }
 
+/*Pre: Recibe una ruta a un archivo en formato de string.
+  Pos: Muestra por stdin dicho archivo (similar al comando unix "cat".
+*/
 int mostrar_en_pantalla(char * ruta){
 	FILE* archivo = fopen(ruta,"r");
 	if (archivo == NULL){
@@ -145,6 +159,9 @@ int mostrar_en_pantalla(char * ruta){
 	return FALLO;
 }
 
+/*Pre: Recibe una ruta a un archivo en formato de string.
+  Pos: Notifica por stderror que se tuvo un error con un archivo de dicha ruta.
+*/
 void notificar_problema_ruta(char *ruta){
 	char mensaje [MAX_MENSAJE];
 	strcpy(mensaje,"\nEl archivo en la ruta: ");
