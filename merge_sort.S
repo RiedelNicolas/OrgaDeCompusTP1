@@ -104,7 +104,8 @@ merge:
 	addi    t0,t0,1		#t0 = medio - inicio + 1 , t0 = tope1 (longitud del primer vector)        
 	sw 	t0,16(fp)	#guardo tope1 en LTA (16(fp))	
 	sll	a0,t0,2		#a0 = tope1*4, (4 = sizeof(int))
-        jal     mymalloc	#devuelve en v0 la dirección del primer elemento de la región solicitada (aux1)    
+        jal     mymalloc	#devuelve en v0 la dirección del primer elemento de la región solicitada (aux1) 
+	beq	v0,0,kill_exec1 #si el puntero recibido es NULL, cortar ejecución  
         sw      v0,24(fp)       #guardo aux1 en LTA (24(fp))
         
 	lw	a2,56(fp)
@@ -113,6 +114,7 @@ merge:
 	sw 	t1,20(fp)	#guardo tope2 en LTA (20(fp))
 	sll	a0,t1,2		#a0 = tope2*4
         jal     mymalloc	#devuelve en v0 la dirección del segundo elemento de la región solicitada (aux2)
+	beq	v0,0,kill_exec2	#si el puntero recibido es NULL, cortar ejecución
         sw      v0,28(fp)	#guardo aux2 en LTA (28(fp))
 
 
@@ -269,5 +271,18 @@ _return:
       	lw      fp,36(sp)
       	addu	sp,sp,48
       	jr      ra
+
+
+kill_exec1:
+	li	v0,SYS_exit
+	syscall
+
+
+kill_exec2:
+	lw	a0,24(fp)	#a0 = aux1
+	jal	myfree		#libero memoria de aux1[]
+	li	v0,SYS_exit
+	syscall
+
 
 	.end	merge
