@@ -238,7 +238,7 @@ while2:
 
 
 
-
+	
 pre_loop_4:
 	lw	t1,20(fp)
 
@@ -258,9 +258,9 @@ while3:
 	b	while3
 
 _return:
-	move	a0,t2		#a0 = aux1
+	lw	a0,24(fp)	#a0 = aux1
 	jal	myfree		#libero memoria de aux1[]
-	move	a0,t3		#a0 = aux2
+	move	a0,28(fp)	#a0 = aux2
 	jal	myfree		#libero memoria de aux2[]
 	lw      ra,40(sp)	
 
