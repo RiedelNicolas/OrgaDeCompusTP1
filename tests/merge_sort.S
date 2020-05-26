@@ -260,7 +260,7 @@ while3:
 _return:
 	lw	a0,24(fp)	#a0 = aux1
 	jal	myfree		#libero memoria de aux1[]
-	move	a0,28(fp)	#a0 = aux2
+	lw	a0,28(fp)	#a0 = aux2
 	jal	myfree		#libero memoria de aux2[]
 	lw      ra,40(sp)	
 
