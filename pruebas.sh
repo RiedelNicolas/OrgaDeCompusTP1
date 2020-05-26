@@ -54,11 +54,10 @@ for f in $(ls tests/* | sort -V); do
 done
 
 echo -e "\n~~~~~~~~ Pasaste $test_passed pruebas de $test_count ~~~~~~~~~"
-if [ "$test_passed" -gt "3" ]; then
-	echo "Entrega aceptada!"
-else
-	echo -e "Pasaron todos los test"
-	exit 1
+
+
+exit 1
+
 fi
 
 exit 0
