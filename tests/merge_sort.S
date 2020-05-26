@@ -57,13 +57,15 @@ merge_sort_rec:
         addi    a2,t0,0		#establezco el medio como nuevo fin
         jal     merge_sort_rec	#tomo la primera mitad del vector y aplico merge sort
 
-        lw      t0,16(fp)	#cargo medio en t0
+	lw      a0,40(fp)	#cargo en a1 el valor de *vec	
         lw      a2,48(fp)	#cargo en a2 el valor de fin
+        lw      t0,16(fp)	#cargo medio en t0
         addi    t0,t0,1		#sumo t0=t0+1
         addi    a1,t0,0		#establezco el nuevo inicio como el medio
         jal     merge_sort_rec	#tomo la segunda mitad del vector y aplico merge sort
 
-        lw      a1,44(fp)	#cargo en a1 el valor del inicio
+        lw      a0,40(fp)	#cargo en a0 el valor de *vec	
+	lw      a1,44(fp)	#cargo en a1 el valor del inicio
         lw      a2,16(fp)	#cargo en a2 el valor del medio
         lw      a3,48(fp)	#cargo en a3 el valor del final
         jal     merge		#llamo a la funcion merge para mergear las mitades de vectores
