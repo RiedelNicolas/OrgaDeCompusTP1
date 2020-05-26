@@ -138,9 +138,8 @@ for_loop:
 
 	sll	t5,t4,2			
 	addu	t6,t2,t5	#t7 = aux1 + i escalado
-	lw	t8,0(t6)	#t8 = aux1[i]		esto puede fallar	
         
-	sw	t7,0(t8)	#aux1[i] = vec[inicio+i]
+	sw	t7,0(t6)	#aux1[i] = vec[inicio+i]
 
 	addu    t4,t4,1		#i++
         b       for_loop
@@ -165,9 +164,8 @@ for_loop2:
 
 	sll	t5,t4,2			
 	addu	t6,t3,t5	#t7 = aux2 + i escalado
-	lw	t8,0(t6)	#t8 = aux2[i]		esto puede fallar	
         
-	sw	t7,0(t8)	#aux2[i] = vec[medio+i+1]
+	sw	t7,0(t6)	#aux2[i] = vec[medio+i+1]
 
 	addu    t4,t4,1		#i++
         b       for_loop2
@@ -264,12 +262,12 @@ _return:
 	jal	myfree		#libero memoria de aux1[]
 	move	a0,t3		#a0 = aux2
 	jal	myfree		#libero memoria de aux2[]
-	lw      ra,32(sp)	
+	lw      ra,40(sp)	
 
 
-        lw	gp,24(sp)
-      	lw      fp,28(sp)
-      	addu	sp,sp,40
+        lw	gp,32(sp)
+      	lw      fp,36(sp)
+      	addu	sp,sp,48
       	jr      ra
 
 	.end	merge
