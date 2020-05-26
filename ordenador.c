@@ -14,7 +14,7 @@ int leer (FILE* stream, int *largo_linea, char** linea);
 int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros);
 bool es_fin_de_linea(char caracter);
 bool es_numerico(char caracter);
-void merge_sort(int *vec, size_t len);
+extern void merge_sort(int *vec, size_t len);
 void imprimir_enteros(int *enteros, size_t largo, FILE* salida);
 bool es_caracter_invalido(char caracter);
 
@@ -171,29 +171,6 @@ bool es_numerico(char caracter){
 */
 bool es_caracter_invalido(char caracter){
 	return !(es_numerico(caracter) || es_fin_de_linea(caracter) || caracter ==' ');
-}
-
-
-
-
-/*Pre: Recibe un array de enteros(pueden ser negativos) y su largo.
-  Pos: Lo ordena en forma ascendiente.
-*/
-void merge_sort(int *vec, size_t len){ // en realiad es un bubble xDDDDDD
-	if(len == 0 ) return;
-
-	int aux;
-
-	for (size_t i = 0; i < (len-1); i++){
-	    for (size_t j = 0; j < (len-i-1); j++){
-	    	if (vec[j] > vec[j+1]) {
-	        // swap
-	        aux      = vec[j];
-	        vec[j]   = vec[j+1];
-	        vec[j+1] = aux;
-	      }
-	    }
-	}
 }
 
 
