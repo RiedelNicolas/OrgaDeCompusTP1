@@ -11,7 +11,7 @@ ls 2>&1
 
 echo -e "\nCorriendo compilacion..."
 echo "gcc -o tp1 main.c ordenador.c merge_sort.S mymalloc.S -Wall -Werror -I. -g"
-gcc gcc -o tp1 main.c ordenador.c merge_sort.S mymalloc.S -Wall -Werror -I. -g 2>&1
+gcc -o tp1 main.c ordenador.c merge_sort.S mymalloc.S -Wall -Werror -I. -g 2>&1
 
 if [ ! $? -eq 0 ]
 then
