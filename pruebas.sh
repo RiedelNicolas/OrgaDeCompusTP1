@@ -21,7 +21,7 @@ fi
 
 check_test(){
 	if [ $? -eq 0 ]; then
-		echo -e  "El programa compilo correctamente"
+		echo -e  "El programa compilo y se pudo ejecutar correctamente"
 		((test_passed++))
 	else
 		echo -e "Salida obtenida: "$(grep -v '^#' $2 | ./tp1 -i - -o -  | tail -1)
@@ -30,7 +30,7 @@ check_test(){
 	fi
 }
 
-echo -e "\nCompilacion exitosa"
+echo -e "\nEl programa se pudo ejecutar correctamente"
 echo -e "\n~~~~~~~~ Corriendo pruebas ~~~~~~~~~"
 
 for f in $(ls tests/* | sort -V); do
