@@ -158,10 +158,10 @@ bool es_fin_de_linea(char caracter){
 
 
 /*Pre: Recibe un caracter.
-  Pos: Responde a la pregunta es numerico?(se considera el signo de menos como un valor numerico)
+  Pos: Responde a la pregunta es numerico?(se considera los signos de + y - como numericos)
 */
 bool es_numerico(char caracter){
-	return( (caracter >= '0' && caracter <= '9') || caracter=='-'); //incluye numeros negativos.
+	return( (caracter >= '0' && caracter <= '9') || caracter=='-'||caracter=='+'); 
 }
 
 
