@@ -8,21 +8,29 @@
 #define MAX_MENSAJE 150
 #define EOL '\n'
 
+
+
+
 #define COMANDO_AYUDA_CORTO "-h"
 #define COMANDO_VERSION_CORTO "-V"
 #define COMANDO_AYUDA_LARGO "--help"
 #define COMANDO_VERSION_LARGO "--version"
-
-#define RUTA_AYUDA "comandos/help.txt"
-#define RUTA_VERSION "comandos/version.txt"
 
 #define COMANDO_INPUT_CORTO "-i"
 #define COMANDO_OUTPUT_CORTO "-o"
 #define COMANDO_INPUT_LARGO "--input"
 #define COMANDO_OUTPUT_LARGO "--output"
 
+
 #define IDENTIFICADOR_STDOUT "-"
 #define IDENTIFICADOR_STDIN "-"
+
+#define RUTA_AYUDA "comandos/help.txt"
+#define RUTA_VERSION "comandos/version.txt"
+
+
+#define CANTIDAD_ARGUMENTOS_FUNCIONAL 5
+#define CANTIDAD_ARGUMENTOS_INFO 2
 
 
 
@@ -42,17 +50,13 @@ bool es_comando_output(char* comando);
 
 
 
-
-
-
-
 int main(int argc, char** argv){
 
 	FILE* stream_entrada = NULL;
 	FILE* stream_salida = NULL;
 	int flag_ordenamiento = -1;
 
-	if(argc == 2){
+	if(argc == CANTIDAD_ARGUMENTOS_INFO){
 		if( es_comando_ayuda(argv[1]) ){
 
 			return mostrar_en_pantalla(RUTA_AYUDA);
@@ -63,7 +67,7 @@ int main(int argc, char** argv){
 			perror(MENSAJE_COMANDO_INVALIDO);
 			return FALLO;
 		}
-	}else if(argc == 5 ){ // -i input -o output
+	}else if(argc == CANTIDAD_ARGUMENTOS_FUNCIONAL ){ // -i input -o output
 		if( es_comando_input(argv[1]) && es_comando_output(argv[3]) ){
 			if( !strcmp(argv[2], IDENTIFICADOR_STDIN) ){
 				stream_entrada = stdin;

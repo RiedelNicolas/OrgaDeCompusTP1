@@ -11,7 +11,7 @@
 
 int ordenar(FILE* entrada, FILE* salida);
 int leer (FILE* stream, int *largo_linea, char** linea);
-int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros);
+int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros);
 bool es_fin_de_linea(char caracter);
 bool es_numerico(char caracter);
 void merge_sort(int *vec, size_t len);
@@ -33,7 +33,7 @@ int ordenar(FILE* entrada, FILE* salida){
 
 	int flag_lectura = FLAG_CONTINUAR ;
 	int *enteros = NULL;
-	int largo_enteros = 0;
+	size_t largo_enteros = 0;
 	int largo_linea = 0;
 	char* linea = NULL;
 
@@ -44,7 +44,7 @@ int ordenar(FILE* entrada, FILE* salida){
 		if(flag_lectura != FLAG_LINEA_INVALIDA ){
 
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
-			merge_sort(enteros, (size_t) largo_enteros);
+			merge_sort(enteros, largo_enteros);
 			imprimir_enteros(enteros, largo_enteros, salida);
 
 			if(enteros[0] == -1 && largo_enteros == 1 ){
@@ -112,7 +112,7 @@ int leer(FILE* stream, int *largo_linea, char** linea){
   Pos: Devuelve en forma de retorno el puntero a un array de enteros equivalente al de caracteres
        Y por parametro devuelve su largo.
 */
-int* pasar_a_enteros(char* linea, int largo_linea, int* largo_enteros){
+int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros){
 
 	char temporal [MAX_DIGITOS];
 	char caracter = 'A';
