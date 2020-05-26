@@ -50,10 +50,6 @@ bool es_comando_output(char* comando);
 
 
 
-
-
-
-
 int main(int argc, char** argv){
 
 	FILE* stream_entrada = NULL;
