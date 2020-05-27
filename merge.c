@@ -49,8 +49,7 @@ void merge(int vec[], int inicio, int medio, int fin) {
   free(aux2);
 }
 
-//fin es (tope del vector -1), por qué? no hay por qué xd
-void merge_sort(int *vec, int inicio, int fin){
+void merge_sort_rec(int* vec, int inicio, int fin){
 
   if(inicio<fin){
     int medio = (inicio+fin-1)/2;
@@ -60,4 +59,10 @@ void merge_sort(int *vec, int inicio, int fin){
 
     merge(vec, inicio, medio, fin);
   }
+}
+
+
+
+void merge_sort(int *vec, size_t len){
+  merge_sort_rec(vec, 0, len-1);
 }
