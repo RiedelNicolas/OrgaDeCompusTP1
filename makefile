@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Werror -I. -g
 
-compile: main.c ordenador.c merge_sort.S mymalloc.S
-	$(CC) $(CFLAGS) *.c *.S -o tp1 
+compile: 
+	$(CC) $(CFLAGS) -o tp1 main.c ordenador.c merge_sort.S mymalloc.S 
 
 run: compile
 	clear
