@@ -56,7 +56,7 @@ done
 echo -e "\n~~~~~~~~ Pasaste $test_passed pruebas de $test_count ~~~~~~~~~"
 
 
-exit 1
+exit 0
 
 fi
 
