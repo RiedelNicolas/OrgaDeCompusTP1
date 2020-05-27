@@ -1,3 +1,2 @@
 gcc -o tp1 main.c ordenador.c merge_sort.S mymalloc.S -Wall -Werror -I. -g
 
-(no se por que no hice un makefile xd)
