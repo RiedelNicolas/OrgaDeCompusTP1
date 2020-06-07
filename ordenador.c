@@ -94,9 +94,17 @@ int leer(FILE* stream, int *largo_linea, char** linea){
     	(*largo_linea)+=1; //Incremento mi tope.
 	}
 
-	if(caracter == EOF || (*largo_linea) <=1){// Siempre va a leer por lo menos un caracter, sea eof o fin de linea
+	/*En el caso que me encuentre el eof, lo reemplazo por un eol. Para que en el resto del programa
+																	 lo pueda tratar como char.
+	*/
+	if(caracter == EOF || (*largo_linea) <=1){ 
+		(*linea) [ (*largo_linea) -1 ] = EOL;
 		return FLAG_FIN_DE_ARCHIVO;
 	}
+
+	if( (*largo_linea) <=1 ){         //Siempre va a leer por lo menos un caracter, sea eof o fin de linea
+		return FLAG_FIN_DE_ARCHIVO;
+	} 
 
 	return 	FLAG_CONTINUAR;
 		
@@ -147,7 +155,7 @@ int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros){
 */
 bool es_fin_de_linea(char caracter){
 
-	return(caracter == EOL || caracter ==  (char) EOF);
+	return(caracter == EOL);
 }
 
 
