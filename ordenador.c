@@ -147,7 +147,7 @@ int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros){
 */
 bool es_fin_de_linea(char caracter){
 
-	return(caracter == EOL);
+	return(caracter == EOL || caracter ==  (char) EOF);
 }
 
 
