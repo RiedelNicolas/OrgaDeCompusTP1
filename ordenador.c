@@ -77,7 +77,7 @@ int leer(FILE* stream, int *largo_linea, char** linea){
 	int largo_buffer = 20;
 	*linea = (char*) malloc(sizeof(char) * largo_buffer); // Asigno un lugar en memoria para el linea.
 	(*largo_linea) = 0;
-	char caracter = 'A'; // un valor trivial
+	int caracter = 1; // un valor trivial
 
 	while ( (caracter != EOL ) && (caracter != EOF) ) {
 
@@ -90,14 +90,9 @@ int leer(FILE* stream, int *largo_linea, char** linea){
     	if( es_caracter_invalido(caracter) ){
     		 return FLAG_LINEA_INVALIDA; // Si lee un caracter que no corresponde, devuelve linea invalida.	
     	}
-    	(*linea) [ (*largo_linea) ] = caracter; //Lo guardo en el linea.
+    	(*linea) [ (*largo_linea) ] = (char) caracter; //Lo guardo en el linea.
     	(*largo_linea)+=1; //Incremento mi tope.
 	}
-
-	/*
-	if( (*largo_linea) <=1 ){     // Siempre va a leer por lo menos un caracter, sea eof o fin de linea
-		return FLAG_LINEA_INVALIDA;
-	}*/
 
 	if(caracter == EOF || (*largo_linea) <=1){// Siempre va a leer por lo menos un caracter, sea eof o fin de linea
 		return FLAG_FIN_DE_ARCHIVO;
@@ -147,13 +142,12 @@ int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros){
 	return enteros;
 }
 
-/*Pre: Recibe un caracter.
-  Pos: Devuelve TRUE si se encuentra un caracter que indice el fin de linea
-       (puede ser tanto EOF como EOL). 
+/*Pre: Recibe un entero que representa un..
+  Pos: Devuelve TRUE si se encuentra un caracter que indice el fin de linea 
 */
 bool es_fin_de_linea(char caracter){
 
-	return(caracter == EOF || caracter == EOL);
+	return(caracter == EOL);
 }
 
 
