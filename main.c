@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <getopt.h>
 
 #include "ordenador.h"
 
@@ -152,11 +153,11 @@ int mostrar_en_pantalla(char * ruta){
 		return FALLO;
 	}
 
-	char caracter = 'a';
+	int caracter  = 1;
 
 	while(caracter != EOF){
 		caracter = fgetc(archivo);
-		if(caracter !=EOF) putc(caracter, stdout);
+		if(caracter !=EOF) putc(char(caracter), stdout);
 	}
 
 	fclose(archivo);
