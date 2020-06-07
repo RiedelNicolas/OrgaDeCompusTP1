@@ -157,7 +157,7 @@ int mostrar_en_pantalla(char * ruta){
 
 	while(caracter != EOF){
 		caracter = fgetc(archivo);
-		if(caracter !=EOF) putc(char(caracter), stdout);
+		if(caracter !=EOF) putc(caracter, stdout);
 	}
 
 	fclose(archivo);
