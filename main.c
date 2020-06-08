@@ -60,10 +60,10 @@ int main(int argc, char** argv){
 	int opt = 0;
 
 	static struct option long_options[] = {
-        {"-version",      no_argument,       NULL,  'V' },
-        {"-help",         no_argument,       NULL,  'h' },
-        {"-input",    required_argument,     NULL,  'i' },
-        {"-output",   required_argument,     NULL,  'o' },
+        {"version",      no_argument,       NULL,  'V' },
+        {"help",         no_argument,       NULL,  'h' },
+        {"input",    required_argument,     NULL,  'i' },
+        {"output",   required_argument,     NULL,  'o' },
         {NULL,           0,                     NULL,    0 }
     };
 
