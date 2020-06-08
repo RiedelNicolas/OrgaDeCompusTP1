@@ -12,19 +12,16 @@
 
 
 
-#define COMANDO_AYUDA_CORTO "-h"
-#define COMANDO_VERSION_CORTO "-V"
-#define COMANDO_AYUDA_LARGO "--help"
-#define COMANDO_VERSION_LARGO "--version"
+#define COMANDO_AYUDA_CORTO 'h'
+#define COMANDO_VERSION_CORTO 'V'
+#define COMANDO_AYUDA_LARGO "help"
+#define COMANDO_VERSION_LARGO "version"
 
-#define COMANDO_INPUT_CORTO "-i"
-#define COMANDO_OUTPUT_CORTO "-o"
-#define COMANDO_INPUT_LARGO "--input"
-#define COMANDO_OUTPUT_LARGO "--output"
+#define COMANDO_INPUT_CORTO 'i'
+#define COMANDO_OUTPUT_CORTO 'o'
+#define COMANDO_INPUT_LARGO "input"
+#define COMANDO_OUTPUT_LARGO "output"
 
-
-#define IDENTIFICADOR_STDOUT "-"
-#define IDENTIFICADOR_STDIN "-"
 
 #define RUTA_AYUDA "comandos/help.txt"
 #define RUTA_VERSION "comandos/version.txt"
@@ -44,12 +41,6 @@
 int mostrar_en_pantalla(char* ruta);
 void notificar_problema_ruta(char *ruta);
 
-bool es_comando_ayuda(char* comando);
-bool es_comando_version(char* comando);
-bool es_comando_input(char* comando);
-bool es_comando_output(char* comando);
-
-
 
 int main(int argc, char** argv){
 
@@ -60,10 +51,10 @@ int main(int argc, char** argv){
 	int opt = 0;
 
 	static struct option long_options[] = {
-        {"version",      no_argument,       NULL,  'V' },
-        {"help",         no_argument,       NULL,  'h' },
-        {"input",    required_argument,     NULL,  'i' },
-        {"output",   required_argument,     NULL,  'o' },
+        {COMANDO_VERSION_LARGO,      no_argument,       NULL, COMANDO_VERSION_CORTO },
+        {COMANDO_AYUDA_LARGO,         no_argument,       NULL,  COMANDO_AYUDA_CORTO },
+        {COMANDO_INPUT_LARGO,    required_argument,     NULL,  COMANDO_INPUT_CORTO },
+        {COMANDO_OUTPUT_LARGO,   required_argument,     NULL,  COMANDO_OUTPUT_CORTO },
         {NULL,           0,                     NULL,    0 }
     };
 
@@ -71,11 +62,11 @@ int main(int argc, char** argv){
 	while ( (opt = getopt_long(argc, argv,"Vhi:o:", 
                    long_options, &long_index )) != -1) {
         switch (opt) {
-            case 'V' :
+            case COMANDO_VERSION_CORTO :
              	return mostrar_en_pantalla(RUTA_VERSION);
-            case 'h' :
+	    case COMANDO_AYUDA_CORTO :
              	return mostrar_en_pantalla(RUTA_AYUDA);
-            case 'i' :
+            case COMANDO_INPUT_CORTO :
 				stream_entrada = fopen(optarg, "r");
 				if(stream_entrada == NULL){
 					notificar_problema_ruta(optarg);
@@ -85,7 +76,7 @@ int main(int argc, char** argv){
 					return FALLO;
 				}
             	break;
-            case 'o' :
+            case COMANDO_OUTPUT_CORTO :
 				stream_salida = fopen(optarg, "w");
 				if(stream_salida == NULL){
 					notificar_problema_ruta(optarg);
@@ -116,36 +107,6 @@ int main(int argc, char** argv){
 	}
 
 	return EXITO;
-}
-
-
-/*Pre: Recibe un string.
-  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a ayuda.
-*/
-bool es_comando_ayuda(char* comando){
-	return( !strcmp(comando,COMANDO_AYUDA_LARGO) || !strcmp(comando,COMANDO_AYUDA_CORTO) );
-}
-
-/*Pre: Recibe un string.
-  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a version.
-*/
-bool es_comando_version(char* comando){
-	return( !strcmp(comando,COMANDO_VERSION_LARGO) || !strcmp(comando,COMANDO_VERSION_CORTO) );
-}
-
-/*Pre: Recibe un string.
-  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a input.
-*/
-bool es_comando_input(char* comando){
-	return( !strcmp(comando,COMANDO_INPUT_LARGO) || !strcmp(comando,COMANDO_INPUT_CORTO) );			
-
-}
-
-/*Pre: Recibe un string.
-  Pos: Devuelve true en el caso que el string corresponda con algunos de los comandos asociados a output.
-*/
-bool es_comando_output(char* comando){
-	return( !strcmp(comando,COMANDO_OUTPUT_LARGO) || !strcmp(comando,COMANDO_OUTPUT_CORTO) );	
 }
 
 /*Pre: Recibe una ruta a un archivo en formato de string.

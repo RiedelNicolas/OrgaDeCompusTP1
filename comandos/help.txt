@@ -10,9 +10,9 @@ Imprime la version del programa y finaliza la ejecucion.
 -h, --help
 Muestra esto por pantalla y finaliza la ejecucion.
 -i, --input
-Especificar la ruta para el archivo de entrada, "-" para stdin.
+Especificar la ruta para el archivo de entrada, por default se usa stdin.
 -o, --output
-Especificar la ruta para el archivo de salida, "-" para stdout.
+Especificar la ruta para el archivo de salida, por default se usa stdout.
 
 
 
