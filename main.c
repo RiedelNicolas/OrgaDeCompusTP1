@@ -60,85 +60,55 @@ int main(int argc, char** argv){
 	int opt = 0;
 
 	static struct option long_options[] = {
-        {"-version",      no_argument,       0,  'V' },
-        {"-help",         no_argument,       0,  'h' },
-        {"-input",    required_argument,     0,  'i' },
-        {"-output",   required_argument,     0,  'o' },
-        {0,           0,                 0,  0       }
+        {"-version",      no_argument,       NULL,  'V' },
+        {"-help",         no_argument,       NULL,  'h' },
+        {"-input",    required_argument,     NULL,  'i' },
+        {"-output",   required_argument,     NULL,  'o' },
+        {NULL,           0,                     NULL,    0 }
     };
 
 
- while ( (opt = getopt_long(argc, argv,"apl:b:", 
+	while ( (opt = getopt_long(argc, argv,"Vhio:", 
                    long_options, &long_index )) != -1) {
         switch (opt) {
-             case 'V' :
-              mostrar_en_pantalla(RUTA_VERSION);
-                 break;
-             case 'h' :
-              mostrar_en_pantalla(RUTA_AYUDA);
-                 break;
-             case 'i' :
-              length = atoi(optarg); 
-                 break;
-             case 'o' :
-              breadth = atoi(optarg);
-                 break;
-             default:
-              print_usage(); 
-            exit(EXIT_FAILURE);
+            case 'V' :
+             	return mostrar_en_pantalla(RUTA_VERSION);
+            case 'h' :
+             	return mostrar_en_pantalla(RUTA_AYUDA);
+            case 'i' :
+				stream_entrada = fopen(optarg, "r");
+				if(stream_entrada == NULL){
+					notificar_problema_ruta(optarg);
+					if(stream_salida !=NULL ){ // se pudo abrir el otro archivo.
+						fclose(stream_salida);
+					}
+					return FALLO;
+				}
+            	break;
+            case 'o' :
+				stream_salida = fopen(optarg, "w");
+				if(stream_salida == NULL){
+					notificar_problema_ruta(optarg);
+					if(stream_entrada != NULL ){ // se pudo abrir el otro archivo.
+						fclose(stream_entrada);
+					}
+					return FALLO;
+				}
+                break;
+            default:
+            	perror(MENSAJE_COMANDO_INVALIDO); 
+            	return FALLO;
         }
     }
 
+    // En el caso que se tenga que activar el default.
+    if(stream_entrada == NULL ) stream_entrada = stdin;
+    if(stream_salida == NULL ) stream_salida = stdout;
 
+	flag_ordenamiento = ordenar(stream_entrada, stream_salida);
 
-
-
-/*
-	if(argc == CANTIDAD_ARGUMENTOS_INFO){
-		if( es_comando_ayuda(argv[1]) ){
-
-			return mostrar_en_pantalla(RUTA_AYUDA);
-
-		}else if( es_comando_version(argv[1]) ){
-			return mostrar_en_pantalla(RUTA_VERSION);
-		}else{
-			perror(MENSAJE_COMANDO_INVALIDO);
-			return FALLO;
-		}
-	}else if(argc == CANTIDAD_ARGUMENTOS_FUNCIONAL ){ // -i input -o output
-		if( es_comando_input(argv[1]) && es_comando_output(argv[3]) ){
-			if( !strcmp(argv[2], IDENTIFICADOR_STDIN) ){
-				stream_entrada = stdin;
-			}else{
-				stream_entrada = fopen(argv[2], "r");
-				if(stream_entrada ==NULL){
-					notificar_problema_ruta(argv[2]);
-					return FALLO;
-				}
-			}
-			if( !strcmp(argv[4], IDENTIFICADOR_STDOUT) ){
-				stream_salida = stdout;
-			}else{
-				stream_salida =  fopen(argv[4],"w");
-				if(stream_salida == NULL){
-					notificar_problema_ruta(argv[4]);
-					return FALLO;
-				}
-			}
-
-			flag_ordenamiento = ordenar(stream_entrada, stream_salida);
-
-			if(stream_salida != stdout) fclose(stream_salida);
-			if(stream_entrada != stdin ) fclose(stream_entrada);
-
-		}else{
-			perror(MENSAJE_COMANDO_INVALIDO);
-			return FALLO;
-		}
-	}else{
-		perror(MENSAJE_COMANDO_INVALIDO);
-		return FALLO;
-	}
+	if(stream_salida != stdout) fclose(stream_salida);
+	if(stream_entrada != stdin ) fclose(stream_entrada);
 
 	if(flag_ordenamiento == FALLO){
 		perror(MENSAJE_ORDENAMIENTO_FALLO);
@@ -146,11 +116,7 @@ int main(int argc, char** argv){
 	}
 
 	return EXITO;
-
-	*/
 }
-
-
 
 
 /*Pre: Recibe un string.
