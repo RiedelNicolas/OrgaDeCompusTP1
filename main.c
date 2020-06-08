@@ -56,7 +56,44 @@ int main(int argc, char** argv){
 	FILE* stream_entrada = NULL;
 	FILE* stream_salida = NULL;
 	int flag_ordenamiento = -1;
+	int long_index = 0;
+	int opt = 0;
 
+	static struct option long_options[] = {
+        {"-version",      no_argument,       0,  'V' },
+        {"-help",         no_argument,       0,  'h' },
+        {"-input",    required_argument,     0,  'i' },
+        {"-output",   required_argument,     0,  'o' },
+        {0,           0,                 0,  0       }
+    };
+
+
+ while ( (opt = getopt_long(argc, argv,"apl:b:", 
+                   long_options, &long_index )) != -1) {
+        switch (opt) {
+             case 'V' :
+              mostrar_en_pantalla(RUTA_VERSION);
+                 break;
+             case 'h' :
+              mostrar_en_pantalla(RUTA_AYUDA);
+                 break;
+             case 'i' :
+              length = atoi(optarg); 
+                 break;
+             case 'o' :
+              breadth = atoi(optarg);
+                 break;
+             default:
+              print_usage(); 
+            exit(EXIT_FAILURE);
+        }
+    }
+
+
+
+
+
+/*
 	if(argc == CANTIDAD_ARGUMENTOS_INFO){
 		if( es_comando_ayuda(argv[1]) ){
 
@@ -109,6 +146,8 @@ int main(int argc, char** argv){
 	}
 
 	return EXITO;
+
+	*/
 }
 
 
