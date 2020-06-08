@@ -46,10 +46,6 @@ int ordenar(FILE* entrada, FILE* salida){
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
 			merge_sort(enteros, largo_enteros);
 			imprimir_enteros(enteros, largo_enteros, salida);
-
-			if(enteros[0] == -1 && largo_enteros == 1 ){
-				flag_lectura = FLAG_FIN_DE_ARCHIVO;
-			}
 			free(enteros);
 		}
 
