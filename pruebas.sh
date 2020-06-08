@@ -24,7 +24,7 @@ check_test(){
 		echo -e  "El programa compilo y se pudo ejecutar correctamente"
 		((test_passed++))
 	else
-		echo -e "Salida obtenida: "$(grep -v '^#' $2 | ./tp1 -i - -o -  | tail -1)
+		echo -e "Salida obtenida: "$(grep -v '^#' $2 | ./tp1  | tail -1)
 		echo -e "Error :("
 
 	fi
@@ -44,9 +44,9 @@ for f in $(ls tests/* | sort -V); do
 		fi
 		echo  "Salida esperada: $expected_output" 
 		if [[ $test_count -gt 9 ]]; then
-			grep -v '^#' $f | ./tp1 -i - -o - | grep -f "salidas/salida_$test_count.txt" > /dev/null		
+			grep -v '^#' $f | ./tp1 | grep -f "salidas/salida_$test_count.txt" > /dev/null		
 		else
-			grep -v '^#' $f | ./tp1 -i - -o -  | grep -f "salidas/salida_0$test_count.txt" > /dev/null		
+			grep -v '^#' $f | ./tp1 | grep -f "salidas/salida_0$test_count.txt" > /dev/null		
 		fi
 		check_test expected_output $f
 
