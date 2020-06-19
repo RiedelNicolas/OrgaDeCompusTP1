@@ -8,11 +8,11 @@
         .ent merge_sort
 
 merge_sort:
-	.frame fp,40,ra
-        subu    sp,sp,40	#4(SRA) + 2(LTA) + 4(ABA)
-      	.cprestore 24		#Saved register area.
-      	sw      fp,28(sp)	#almaceno valor de fp a 28bytes del sp
-      	sw      ra,32(sp)
+	.frame fp,32,ra
+        subu    sp,sp,32	#4(SRA) + 0(LTA) + 4(ABA)
+      	.cprestore 16		#Saved register area.
+      	sw      fp,20(sp)	#almaceno valor de fp a 20bytes del sp
+      	sw      ra,24(sp)
 	move    fp,sp		#fp = sp
 
 	sub	t0,a1,1		#t0 = len - 1
@@ -21,10 +21,10 @@ merge_sort:
 
 	jal	merge_sort_rec
 
-	lw      ra,32(sp)	
-        lw	gp,24(sp)
-      	lw      fp,28(sp)
-      	addu   	sp,sp,40
+	lw      ra,24(sp)	
+        lw	gp,16(sp)
+      	lw      fp,20(sp)
+      	addu   	sp,sp,32
       	jr      ra
 
 	.end	merge_sort
