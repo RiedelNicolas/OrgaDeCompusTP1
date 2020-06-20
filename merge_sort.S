@@ -276,13 +276,13 @@ _return:
 kill_exec1:
 	li	v0,SYS_exit
 	syscall
-
+	b	_return
 
 kill_exec2:
 	lw	a0,24(fp)	#a0 = aux1
 	jal	myfree		#libero memoria de aux1[]
 	li	v0,SYS_exit
 	syscall
-
+	b	_return
 
 	.end	merge
