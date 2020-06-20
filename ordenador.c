@@ -6,6 +6,8 @@
 #define FLAG_FIN_DE_ARCHIVO 1 
 #define FLAG_LINEA_INVALIDA -1
 #define FLAG_CONTINUAR 0
+#define FLAG_PROBLEMA_MEMORIA -2
+#define FLAG_LINEA_INVALIDA -1
 
 
 
@@ -40,10 +42,22 @@ int ordenar(FILE* entrada, FILE* salida){
 	while(flag_lectura == FLAG_CONTINUAR){
 
 		flag_lectura = leer(entrada, &largo_linea, &linea);
+
+		if(flag_lectura == FLAG_PROBLEMA_MEMORIA){
+			perror("Problema asignando memoria dinamica");
+			return FALLO;
+		}
 		
 		if(flag_lectura != FLAG_LINEA_INVALIDA ){
 
 			enteros = pasar_a_enteros(linea, largo_linea, &largo_enteros);
+
+			if(enteros == NULL){
+				perror("Problema asignando memoria dinamica");
+				free(linea);
+				return FALLO;
+			}
+
 			merge_sort(enteros, largo_enteros);
 			imprimir_enteros(enteros, largo_enteros, salida);
 			free(enteros);
@@ -72,6 +86,11 @@ int leer(FILE* stream, int *largo_linea, char** linea){
 
 	int largo_buffer = 20;
 	*linea = (char*) malloc(sizeof(char) * largo_buffer); // Asigno un lugar en memoria para el linea.
+
+	if( (*linea) == NULL){
+		return FLAG_PROBLEMA_MEMORIA;
+	}
+
 	(*largo_linea) = 0;
 	int caracter = 1; // un valor trivial
 
@@ -80,6 +99,14 @@ int leer(FILE* stream, int *largo_linea, char** linea){
     	if( (*largo_linea) == (largo_buffer-1) ){ // tengo que agrandar mi memoria.(Dejo lugar para /0)
      	 	largo_buffer +=10; //Voy agregando de a 10 lugares. 
       		(*linea) = (char*) realloc((*linea), sizeof(char) * largo_buffer); // re ubico en la memoria.
+      		if( (*linea) == NULL){
+				return FLAG_PROBLEMA_MEMORIA;
+			}
+    	}
+
+    	if( ferror(stream) ){
+    		perror("Problema leyendo el archivo");
+    		return FLAG_LINEA_INVALIDA;
     	}
 
     	caracter = getc(stream); // Leo un caracter del stream.
@@ -109,6 +136,9 @@ int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros){
 	char caracter = 'A';
 	int largo_buffer = 10;
 	int *enteros = (int*) malloc(sizeof(int) * largo_buffer);
+	if( enteros == NULL ){
+		return NULL ;
+	}
 
  	(*largo_enteros) = 0;
 
@@ -120,6 +150,9 @@ int* pasar_a_enteros(char* linea, int largo_linea, size_t* largo_enteros){
 		if( (*largo_enteros) == (largo_buffer-1) ){
 			largo_buffer +=10; //Voy agregando de a 10 lugares. 
       		enteros = (int*) realloc(enteros, sizeof(int)* largo_buffer); // re ubico en la memoria.
+      		if( enteros == NULL ){
+				return NULL ;
+			}
 		}
 
 		caracter = linea[i]; i++;

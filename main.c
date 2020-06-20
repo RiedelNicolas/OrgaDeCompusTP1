@@ -33,7 +33,7 @@
 
 
 #define MENSAJE_COMANDO_INVALIDO "\nEl comando usado es invalido, use -h para ayuda"
-#define MENSAJE_ORDENAMIENTO_FALLO "\n No se pudo ordenar, el input no tiene el formato requerido"
+#define MENSAJE_ORDENAMIENTO_FALLO "\n No se pudo ordenar, ocurrio un error"
 
 
 
